@@ -4,9 +4,12 @@ Dieselbe kleine Konto-App zweimal gebaut (node-demo und spring-demo), um zu zeig
 Starten
 
 Spring Boot: KontoApplication in IntelliJ starten → http://localhost:8080
+
 Node.js: im Ordner node-demo npm install und npm start → http://localhost:3000
 Demo
+
 Zwei Tabs öffnen und in beiden kurz nacheinander „Jahresbericht erstellen“ klicken.
 
 Node.js: der zweite Bericht braucht ca. 10 Sekunden (ein Thread, alles nacheinander)
+
 Spring Boot: beide sind nach ca. 5 Sekunden fertig (ein Thread pro Anfrage)
