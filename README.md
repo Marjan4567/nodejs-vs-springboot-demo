@@ -1,4 +1,5 @@
 Mein Konto – Node.js vs. Spring Boot
+
 Dieselbe kleine Konto-App zweimal gebaut (node-demo und spring-demo), um zu zeigen, wie Node.js (ein Thread) und Spring Boot (ein Thread pro Anfrage) mehrere Anfragen gleichzeitig behandeln.
 Starten
 
