@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mein Konto</title>
+    <style>
+        .positive-amount {
+            color: green;
+        }
+        .negative-amount {
+            color: red;
+        }
+    </style>
+</head>
+
+<body onload="getTransactions()">
+<h1>Ihre aktuellen Transaktionen</h1>
+
+<table border="1">
+    <tr>
+        <th>Titel</th>
+        <th>Betrag</th>
+    </tr>
+    <tbody id="transactions-body"></tbody>
+</table>
+
+<h2>Neue Transaktion</h2>
+<form onsubmit="addTransaction(event)">
+    <input id="title" placeholder="Titel" required>
+    <input id="amount" type="number" placeholder="Betrag (z.B. -20)" required>
+    <button>Hinzufügen</button>
+</form>
+
+<p>
+    <a href="#" onclick="createReport(event)">Jahresbericht erstellen</a>
+</p>
+<p id="report"></p>
+</body>
+
+<script>
+    const transactionBody = document.getElementById('transactions-body');
+
+    // Alle Transaktionen vom Server holen und anzeigen
+    function getTransactions() {
+        fetch('/transactions')
+            .then(response => response.json())
+            .then(transactions => transactions.forEach(addTransactionToTable));
+    }
+
+    // Neue Transaktion an den Server schicken (POST)
+    function addTransaction(event) {
+        event.preventDefault();
+
+        const transaction = {
+            title: document.getElementById('title').value,
+            amount: Number(document.getElementById('amount').value)
+        };
+
+        fetch('/transactions', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(transaction)
+        })
+            .then(response => response.json())
+            .then(addTransactionToTable);
+
+        event.target.reset();
+    }
+
+    // Jahresbericht vom Server holen und unter dem Link anzeigen
+    function createReport(event) {
+        event.preventDefault();
+        const report = document.getElementById('report');
+        report.textContent = 'Der Server rechnet ...';
+
+        fetch('/report')
+            .then(response => response.json())
+            .then(data => {
+                report.innerHTML =
+                    '<b>Einnahmen:</b> <span class="positive-amount">' + data.income + '</span><br>' +
+                    '<b>Ausgaben:</b> <span class="negative-amount">' + data.expenses + '</span><br>' +
+                    '<b>Kontostand:</b> ' + data.balance;
+            });
+    }
+
+    // Eine Zeile in die Tabelle einfügen
+    function addTransactionToTable(transaction) {
+        const row = transactionBody.insertRow();
+        row.className = transaction.amount >= 0 ? 'positive-amount' : 'negative-amount';
+        row.insertCell().textContent = transaction.title;
+        row.insertCell().textContent = transaction.amount;
+    }
+</script>
+
+</html>
