@@ -33,7 +33,10 @@ public class TransactionController {
 
     @GetMapping("/report")
     public Map<String, Integer> viewReport() {
-        System.out.println("Jahresbericht -> Thread: " + Thread.currentThread().getName());
-        return transactionService.createReport();
+        String thread = Thread.currentThread().getName();
+        System.out.println("Jahresbericht gestartet -> Thread: " + thread);
+        Map<String, Integer> report = transactionService.createReport();
+        System.out.println("Jahresbericht fertig -> Thread: " + thread);
+        return report;
     }
 }
